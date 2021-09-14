@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { getAllPosts, getSinglePost } from '../../utils/mdx';
+import styles from '../../styles/Home.module.css';
 
 const CustomLink = ({ as, href, ...otherProps }) => {
   return (
@@ -17,7 +18,7 @@ const Post = ({ code, frontmatter }) => {
   const Component = useMemo(() => getMDXComponent(code), [code]);
 
   return (
-    <div className="wrapper">
+    <div className={styles.container}>
       <h1>{frontmatter.title}</h1>
       <Component
         components={{
