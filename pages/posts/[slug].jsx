@@ -1,6 +1,17 @@
 import { useMemo } from 'react';
+import Link from 'next/link';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { getAllPosts, getSinglePost } from '../../utils/mdx';
+
+const CustomLink = ({ as, href, ...otherProps }) => {
+  return (
+    <>
+      <Link as={as} href={href} className="custom-link">
+        <a {...otherProps} />
+      </Link>
+    </>
+  );
+};
 
 const Post = ({ code, frontmatter }) => {
   const Component = useMemo(() => getMDXComponent(code), [code]);
@@ -8,9 +19,19 @@ const Post = ({ code, frontmatter }) => {
   return (
     <div className="wrapper">
       <h1>{frontmatter.title}</h1>
-      <Component />
+      <Component
+        components={{
+          a: CustomLink,
+        }}
+      />
     </div>
   );
+};
+
+export const getStaticProps = async ({ params }) => {
+  const post = await getSinglePost(params.slug);
+
+  return { props: { ...post } };
 };
 
 export const getStaticPaths = async () => {
